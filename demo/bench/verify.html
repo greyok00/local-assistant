@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Research Library, widget verification</title>
+<link rel="icon" href="data:,">
+<style>
+  body { font: 16px/1.6 system-ui, sans-serif; margin: 48px auto; max-width: 62ch; color: #1c2430; }
+  h1 { font-size: 28px; margin-bottom: 8px; }
+  p { color: #45505f; }
+</style>
+</head>
+<body>
+  <h1>Research Library</h1>
+  <p>Verification page: the production loader below mounts the shipped widget and reads the
+  real index built from this library (5,645 chunks, 220 pages). Nothing here mocks a service.</p>
+  <script type="module" src="/local-assistant/loader.js" data-assistant
+          data-config="/local-assistant/bench/verify.config.json"></script>
+</body>
+</html>

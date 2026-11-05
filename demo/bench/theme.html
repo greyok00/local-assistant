@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Research Library, theme adaptation</title>
+<link rel="icon" href="data:,">
+<!-- The library's own stylesheets, served read-only by the demo tenant. The
+     widget must pick up their palette without being told about it. -->
+<link rel="stylesheet" href="/assets/kit/theme.css">
+<link rel="stylesheet" href="/assets/kit/library.css">
+<link rel="stylesheet" href="/assets/kit/library-theme.css">
+</head>
+<body>
+<header class="rl-top">
+  <div class="rl-util">
+    <span>A source-cited reference library</span>
+    <span class="rl-util-mid">theme adaptation check</span>
+    <button class="rl-theme" type="button" id="flip" aria-pressed="false"
+            aria-label="Switch to dark paper" title="Dark paper">Switch theme</button>
+  </div>
+  <div class="rl-mast">
+    <a class="rl-wordmark" href="/index.html">Research Library</a>
+  </div>
+</header>
+<main id="content" class="shell">
+  <article class="article">
+    <div class="full"><h1>Disk and Memory Forensics</h1></div>
+    <div class="full"><p class="lede">This page uses the library's real theme stylesheet. The
+    assistant in the corner should take its paper colour, its ink, and its vermilion accent
+    from this page, and change with the theme toggle.</p></div>
+    <div class="full"><p>Disk forensics acquires and examines storage media while maintaining
+    integrity via write blockers and hash validation. Nothing on this page configures the
+    widget's colours; it reads them from the document.</p></div>
+  </article>
+</main>
+<script>
+  // The library's site script is not loaded here; this is its toggle, reduced.
+  const flip = document.getElementById('flip');
+  const root = document.documentElement;
+  const setTheme = (name) => {
+    if (name === 'dark') root.setAttribute('data-theme', 'dark');
+    else root.removeAttribute('data-theme');
+    const dark = name === 'dark';
+    flip.setAttribute('aria-pressed', String(dark));
+    flip.title = dark ? 'Light paper' : 'Dark paper';
+    flip.setAttribute('aria-label', flip.title);
+  };
+  flip.addEventListener('click', () => {
+    setTheme(root.getAttribute('data-theme') === 'dark' ? 'master' : 'dark');
+  });
+</script>
+<script type="module" src="/local-assistant/loader.js" data-assistant
+        data-config="/local-assistant/bench/verify.config.json"></script>
+</body>
+</html>

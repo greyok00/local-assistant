@@ -1,0 +1,39 @@
+# Continuous integration for the Local Assistant repository.
+#
+# Scope: the fast inner loop only. The unit suite (node --test) covers every
+# first-party module in product/src, and php -l syntax-checks the WordPress
+# plugin wrapper. The Playwright e2e suite (product/tests/e2e, `npm run e2e`)
+# needs real browser downloads and is intentionally NOT run here; run it
+# locally with `npx playwright install --with-deps chromium` first.
+name: CI
+
+on:
+  push:
+    branches: [master, portfolio-clean]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: product/package-lock.json
+
+      # package-lock.json is committed, so npm ci reproducibly installs exactly
+      # what the lockfile pins, including the pinned test dependencies.
+      - name: Install dependencies
+        working-directory: product
+        run: npm ci --no-audit --no-fund
+
+      - name: Unit tests (node --test over product/tests/unit)
+        working-directory: product
+        run: npm test
+
+      - name: PHP lint (WordPress plugin wrapper)
+        run: php -l product/wordpress/local-assistant.php

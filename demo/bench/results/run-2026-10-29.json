@@ -1,0 +1,94 @@
+{
+  "status": "failed",
+  "measuredAt": "2026-10-29T15:06:00Z",
+  "reason": "WebGPU device initialization failed with GPUOutOfMemoryError after the model download completed. No question was generated, so there are no TTFT or total timings and no answers to grade.",
+  "whatFailed": "CreateMLCEngine device allocation, not model download and not the retrieval gate",
+  "hardware": {
+    "gpu": "NVIDIA RTX A4500 Laptop GPU",
+    "driver": "615.71.10",
+    "memoryTotalMiB": 16384,
+    "memoryUsedMiB": 15739,
+    "freeMiBApprox": 645,
+    "memoryHolder": {
+      "pid": 5920,
+      "process": "(another local model server)",
+      "usedMiB": 15502
+    }
+  },
+  "browser": {
+    "executable": "~/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome",
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36",
+    "flags": [
+      "--enable-unsafe-webgpu",
+      "--enable-features=Vulkan,WebGPU",
+      "--use-angle=vulkan",
+      "--ignore-gpu-blocklist"
+    ],
+    "navigatorGpu": true,
+    "requestAdapter": "resolved (non-null)",
+    "adapterInfo": {
+      "vendor": "nvidia",
+      "architecture": "ampere",
+      "device": "",
+      "description": "",
+      "isFallbackAdapter": false
+    }
+  },
+  "attempts": [
+    {
+      "model": "SmolLM2-360M-Instruct-q4f16_1-MLC",
+      "profile": "cold (fresh user data dir)",
+      "downloadCompleted": true,
+      "elapsedMs": 491000,
+      "errors": [
+        "GPUOutOfMemoryError",
+        "Device was lost. This can happen due to insufficient memory or other GPU constraints. Detailed error: [object GPUDeviceLostInfo]. Please try to reload WebLLM with a less resource-intensive model.",
+        "Device lost, calling Instance.dispose(). Please initialize again.  GPUDeviceLostInfo",
+        "Bench failed: Program terminated with exit(1)"
+      ]
+    },
+    {
+      "model": "SmolLM2-360M-Instruct-q4f16_1-MLC",
+      "profile": "warm (model cached)",
+      "downloadCompleted": true,
+      "elapsedMs": 10000,
+      "errors": [
+        "GPUOutOfMemoryError",
+        "Device was lost. This can happen due to insufficient memory or other GPU constraints. Detailed error: [object GPUDeviceLostInfo].",
+        "Bench failed: Program terminated with exit(1)"
+      ]
+    },
+    {
+      "model": "SmolLM2-135M-Instruct-q0f16-MLC",
+      "profile": "cold (fresh user data dir)",
+      "note": "comparison run permitted by controller resolution 2",
+      "downloadCompleted": true,
+      "elapsedMs": 591000,
+      "errors": [
+        "GPUOutOfMemoryError",
+        "Device was lost. This can happen due to insufficient memory or other GPU constraints.",
+        "Bench failed: Object has already been disposed"
+      ]
+    }
+  ],
+  "coldDownloadMeasuredFromCacheStorage": {
+    "method": "Sum of Cache Storage entry sizes in a fresh profile after the cold load.",
+    "smollm2-360m-q4f16_1": {
+      "transformersCacheBytes": 23685047,
+      "webllmModelBytes": 205842866,
+      "webllmWasmBytes": 6408980,
+      "webllmConfigBytes": 2021,
+      "totalBytes": 235938914,
+      "totalMiB": 225.01
+    },
+    "smollm2-135m-q0f16": {
+      "transformersCacheBytes": 23685047,
+      "webllmModelBytes": 271204851,
+      "webllmWasmBytes": 6119439,
+      "webllmConfigBytes": 2018,
+      "totalBytes": 301011355,
+      "totalMiB": 287.07
+    }
+  },
+  "retrievalOnlyRun": "retrieval-2026-10-29.json (MiniLM + gate on the real 5,645-chunk artifact; no chat model)"
+}

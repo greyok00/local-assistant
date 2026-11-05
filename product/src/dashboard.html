@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Local Assistant, index builder</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="./dashboard.css"></head>
+<body>
+<div class="la-shell" data-tabs data-tab-start="build">
+
+  <header class="la-head">
+    <div class="la-brand">
+      <span class="la-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M22.00 10.25L20.33 9.28L19.37 8.32L19.37 7.18L18.67 7.70L18.40 6.82L17.61 7.53L17.00 8.58L15.95 9.02L15.25 9.02L15.33 9.37L14.19 9.37L14.28 9.63L12.96 9.54L13.14 9.89L9.98 9.81L6.04 10.60L4.37 10.60L3.05 10.16L2.00 9.19L2.09 9.98L2.53 10.95L3.32 11.65L3.05 11.82L4.02 12.09L3.93 12.35L5.42 12.35L7.09 11.74L6.65 12.70L5.68 13.75L7.53 13.14L6.47 14.11L4.28 14.02L3.93 14.19L2.96 15.51L2.09 15.86L2.00 16.21L3.14 16.30L4.54 14.98L4.81 15.25L4.19 16.12L3.32 16.65L3.32 17.00L4.54 17.00L5.68 15.60L7.00 15.60L8.40 14.89L9.89 13.23L9.54 12.88L9.81 12.79L12.00 13.23L12.18 13.40L11.91 13.58L12.96 13.58L12.79 13.84L14.81 13.84L15.68 13.40L16.91 14.98L17.96 15.51L20.33 17.18L21.56 17.18L21.30 16.65L20.33 16.39L18.14 14.19L16.82 13.67L17.00 13.49L18.93 13.32L19.46 13.75L19.46 14.37L19.72 14.81L19.89 14.54L20.16 14.98L20.33 14.89L20.42 14.02L19.63 12.53L19.37 12.35L17.96 12.53L17.88 12.35L19.54 10.68L20.16 10.60L20.86 11.04L21.56 11.04L21.74 10.77L21.21 10.60L21.12 10.33L21.82 10.51ZM20.60 10.86L20.86 10.77L20.42 10.51L20.16 10.60ZM17.79 9.28L17.88 9.46L18.32 9.19L18.23 9.02Z"/></svg>
+      </span>
+      <div>
+        <h1>Local Assistant</h1>
+        <p class="la-sub">Build the search index this site's assistant answers from.</p>
+      </div>
+    </div>
+    <a class="la-site" href="https://randybarham.com" target="_blank" rel="noopener">randybarham.com <span aria-hidden="true">&#8599;</span></a>
+  </header>
+
+  <nav class="la-tabs" role="tablist" aria-label="Sections on this page">
+    <a class="la-tab is-on" id="la-tab-build" href="#build" role="tab"
+      aria-controls="build" aria-selected="true" data-tab="build">Build</a>
+    <a class="la-tab" id="la-tab-install" href="#install" role="tab"
+      aria-controls="install" aria-selected="false" data-tab="install">Install</a>
+    <a class="la-tab" id="la-tab-settings" href="#settings" role="tab"
+      aria-controls="settings" aria-selected="false" data-tab="settings">Settings</a>
+    <a class="la-tab" id="la-tab-faq" href="#faq" role="tab"
+      aria-controls="faq" aria-selected="false" data-tab="faq">FAQ</a>
+  </nav>
+
+  <!-- Build ---------------------------------------------------------------->
+  <section class="la-pane" id="build" role="tabpanel" aria-labelledby="la-tab-build">
+    <div class="la-card">
+      <p class="la-lead">Reads this site's sitemap and builds the index in this
+        browser. Nothing is uploaded.</p>
+
+      <form class="la-form" id="la-form" novalidate>
+        <label for="la-url">Site URL</label>
+        <div class="la-row">
+          <input id="la-url" type="url" spellcheck="false" autocomplete="url"
+            placeholder="https://example.com/">
+          <button id="la-start" type="submit">Build index</button>
+        </div>
+      </form>
+
+      <div id="la-progress" class="la-bar" aria-hidden="true"><span></span></div>
+      <pre id="la-report" class="la-report" aria-live="polite">Ready when you are.</pre>
+      <div id="la-download" class="la-download"></div>
+      <p class="la-note" id="la-wp-save" hidden>
+        <button id="la-save" type="button" class="la-button-quiet" hidden>Save to WordPress</button>
+      </p>
+    </div>
+
+    <div class="la-card la-card-quiet">
+      <h2>What you get</h2>
+      <dl class="la-facts">
+        <div><dt>assistant-index.json</dt><dd>Page titles, headings, chunk text, and source URLs.</dd></div>
+        <div><dt>assistant-index.bin</dt><dd>One number vector per chunk, used to rank pages.</dd></div>
+      </dl>
+      <p class="la-note">Put both beside the assistant's config, or use
+        <strong>Save to WordPress</strong>.</p>
+    </div>
+  </section>
+
+  <!-- Install -------------------------------------------------------------->
+  <section class="la-pane" id="install" role="tabpanel" aria-labelledby="la-tab-install">
+    <p class="la-lead">Static folder or WordPress plugin; both use the two files from Build.</p>
+
+    <div class="la-cols">
+
+      <div class="la-card">
+        <h2>Static site</h2>
+        <ol class="la-steps">
+          <li>Copy the assistant folder to your site, for example <code>/assistant/</code>.</li>
+          <li>Upload the two index files from the Build tab into that same folder.</li>
+          <li>Add this line before <code>&lt;/body&gt;</code> on every page:
+            <pre class="la-code">&lt;script type="module" src="/assistant/loader.js"
+  data-assistant data-config="/assistant/assistant.config.json"&gt;&lt;/script&gt;</pre>
+          </li>
+          <li>Reload the site twice. The chat pill appears bottom-right.</li>
+        </ol>
+        <p class="la-note">The site must be served over HTTPS or localhost; browsers
+          block the model on plain HTTP and from <code>file://</code>.</p>
+      </div>
+
+      <div class="la-card">
+        <h2>WordPress</h2>
+        <ol class="la-steps">
+          <li>Upload the plugin zip in <em>Plugins &rarr; Add New &rarr; Upload Plugin</em>.</li>
+          <li>Activate it, then open <em>Settings &rarr; Local Assistant</em>.</li>
+          <li>Enter the site URL, press <strong>Build index</strong>, then
+            <strong>Save to WordPress</strong>.</li>
+          <li>The assistant appears on every public page; no theme edit needed.</li>
+        </ol>
+        <p class="la-note">The index is stored in <code>wp-content/uploads/local-assistant/</code>.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Settings ------------------------------------------------------------->
+  <section class="la-pane" id="settings" role="tabpanel" aria-labelledby="la-tab-settings">
+    <p class="la-lead">On the static install these live in <code>assistant.config.json</code>.
+      Download and replace the file beside the index.</p>
+
+    <form class="la-card la-form" id="la-settings" novalidate>
+      <div class="la-field">
+        <label for="la-set-name">Assistant name</label>
+        <input id="la-set-name" name="assistantName" type="text" autocomplete="off">
+      </div>
+      <div class="la-field">
+        <label for="la-set-greeting">Greeting</label>
+        <input id="la-set-greeting" name="greeting" type="text" autocomplete="off">
+      </div>
+      <div class="la-field">
+        <label for="la-set-accent">Fallback accent</label>
+        <input id="la-set-accent" name="accent" type="text" pattern="#[0-9a-fA-F]{6}" spellcheck="false">
+        <p class="la-hint">Used only when the theme exposes no color of its own.</p>
+      </div>
+
+      <div class="la-pair">
+        <div class="la-field">
+          <label for="la-set-topk">Pages per answer</label>
+          <input id="la-set-topk" name="topK" type="number" min="1" max="20" step="1">
+          <p class="la-hint">How many matching sections are read before answering.</p>
+        </div>
+        <div class="la-field">
+          <label for="la-set-words">Answer length cap</label>
+          <input id="la-set-words" name="maxAnswerWords" type="number" min="20" max="400" step="10">
+          <p class="la-hint">Words, before the assistant stops.</p>
+        </div>
+      </div>
+
+      <div class="la-pair">
+        <div class="la-field">
+          <label for="la-set-threshold">Relevance floor</label>
+          <input id="la-set-threshold" name="relevanceThreshold" type="number"
+            min="0.05" max="0.95" step="0.01">
+          <p class="la-hint">Lower answers more loosely; higher refuses more often.</p>
+        </div>
+        <div class="la-field">
+          <label for="la-set-pages">Pages per build</label>
+          <input id="la-set-pages" name="maxPages" type="number" min="1" step="1">
+          <p class="la-hint">Large sites stop at this count.</p>
+        </div>
+      </div>
+
+      <p class="la-actions">
+        <button type="submit">Download assistant.config.json</button>
+      </p>
+      <p class="la-note" id="la-settings-note" aria-live="polite">Values are checked before the file is written.</p>
+    </form>
+
+    <div class="la-card la-card-quiet">
+      <h2>On WordPress</h2>
+      <p>The same fields live under <em>Settings &rarr; Local Assistant</em>; no file to copy.</p>
+    </div>
+  </section>
+
+  <!-- FAQ ------------------------------------------------------------------>
+  <section class="la-pane" id="faq" role="tabpanel" aria-labelledby="la-tab-faq">
+    <div class="la-faq">
+
+        <details>
+          <summary>Does anything leave my server?</summary>
+          <p>No. The page downloads the site's own HTML, builds vectors in this
+            browser, and hands you two files. There is no account, no API key, and
+            no third-party request.</p>
+        </details>
+
+        <details>
+          <summary>How often should I rebuild?</summary>
+          <p>Only when the content changes. The index is a snapshot: new or edited
+            pages stay invisible to the assistant until you rebuild and replace the
+            two files.</p>
+        </details>
+
+        <details>
+          <summary>Where do the two files go?</summary>
+          <p>Beside the assistant's config, as <code>assistant-index.json</code> and
+            <code>assistant-index.bin</code>. In WordPress, press
+            <strong>Save to WordPress</strong> instead, the plugin stores them for you.</p>
+        </details>
+
+        <details>
+          <summary>The report shows <code>127.0.0.1</code> links. Is that wrong?</summary>
+          <p>Yes, for a live site. Ingesting through a local server records local
+            addresses. Ingest the public URL instead, or rewrite those URLs to
+            site-relative paths before uploading.</p>
+        </details>
+
+        <details>
+          <summary>Will it work on phones and other browsers?</summary>
+          <p>Yes. It appears on phones, tablets, and every current browser, with
+            nothing for the visitor to set up.</p>
+        </details>
+
+        <details>
+          <summary>Do the colors need configuring?</summary>
+          <p>No. The widget samples the host page's background, text, and accent
+            token, then derives its own surfaces with contrast correction. The
+            accent setting is used only when the theme exposes no color.</p>
+        </details>
+
+        <details>
+          <summary>It says it could not read the site.</summary>
+          <p>That is usually cross-origin access: a server that does not send CORS
+            headers. Ingest the site's own address, from a page on that same domain,
+            or add <code>Access-Control-Allow-Origin</code> for this page.</p>
+        </details>
+
+        <details>
+          <summary>How large will the index be?</summary>
+          <p>Roughly 1.5 KB of vectors per chunk and a little more in metadata, so
+            a few hundred pages usually lands between 2 and 6 MB in total.</p>
+        </details>
+
+    </div>
+  </section>
+
+  <footer class="la-foot">
+    <span>Runs entirely in the browser. Nothing is uploaded.</span>
+    <span>No account, no API key.</span>
+  </footer>
+</div>
+<script src="./tabs.js"></script>
+<script type="module" src="./dashboard.js"></script>
+</body></html>

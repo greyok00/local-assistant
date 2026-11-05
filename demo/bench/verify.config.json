@@ -1,0 +1,14 @@
+{
+  "siteName": "Randy Barham, Research Library",
+  "assistantName": "Library Assistant",
+  "greeting": "Ask about the research library",
+  "indexPath": "/local-assistant/assistant-index",
+  "model": "SmolLM2-360M-Instruct-q4f16_1-MLC",
+  "embedder": "Xenova/all-MiniLM-L6-v2",
+  "accent": "#1f3a5f",
+  "relevanceThreshold": 0.35,
+  "topK": 6,
+  "maxAnswerWords": 120,
+  "maxPages": 500,
+  "modelBaseUrl": ""
+}

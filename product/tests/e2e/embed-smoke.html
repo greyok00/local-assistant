@@ -1,0 +1,15 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>embed smoke</title></head>
+<body>
+<p>embed smoke</p>
+<script type="module">
+  // The page under test imports the shipped, built module: no mocking, no
+  // import map, exactly what a customer's site would load.
+  window.__embed = async (texts) => {
+    const { createEmbedder } = await import('../../dist/embedder.js');
+    const embedder = createEmbedder({ model: 'Xenova/all-MiniLM-L6-v2' });
+    const vectors = await embedder.embed(texts);
+    return vectors.map(v => ({ size: v.length, kind: Object.prototype.toString.call(v), first: v[0] }));
+  };
+</script>
+</body></html>

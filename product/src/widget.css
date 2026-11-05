@@ -1,0 +1,303 @@
+/* LocalAssistant widget, floating launcher, docked panel on desktop, a
+   full-screen sheet on phones. One stylesheet, no build step needed. */
+/* Every colour is a custom property set from the host page by theme.js; these
+   values are the fallback for the moment before the first read completes. */
+.la-root {
+  --la-accent: #e8622c;
+  --la-on-accent: #16181d;
+  --la-surface: #ffffff;
+  --la-body: #fbfbfc;
+  --la-text: #16181d;
+  --la-muted: #7a7f8a;
+  --la-border: #e6e8ec;
+  --la-bubble: #eef0f3;
+  position: fixed; right: 20px; bottom: 20px; z-index: 2147483000;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color: var(--la-text);
+  color-scheme: light dark;
+}
+
+/* Launcher: one pill carrying the sparkle mark and the words. The mark
+   repeats in the panel header and avatars, so it stays; the words make the
+   control self-explanatory instead of a bare circle. */
+.la-launcher {
+  position: relative; display: inline-flex; align-items: center; gap: 9px;
+  height: 48px; padding: 0 18px 0 14px; border: 0; border-radius: 24px;
+  cursor: pointer; background: var(--la-accent); color: var(--la-on-accent);
+  box-shadow: 0 8px 28px rgba(0,0,0,.28), 0 1px 2px rgba(0,0,0,.2);
+  transition: transform .16s ease, box-shadow .16s ease, filter .16s ease;
+}
+.la-launcher:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 34px rgba(0,0,0,.32), 0 1px 2px rgba(0,0,0,.2);
+  filter: brightness(1.05);
+}
+.la-launcher:active { transform: scale(.97); }
+.la-launcher-icon {
+  position: relative; width: 22px; height: 22px; flex: none;
+  display: grid; place-items: center;
+  transition: transform .32s cubic-bezier(.2,.8,.2,1);
+}
+.la-launcher:hover .la-launcher-icon { transform: scale(1.12); }
+.la-launcher svg { width: 20px; height: 20px; }
+.la-launcher-label {
+  display: inline-block; font-size: 11px; font-weight: 650;
+  letter-spacing: .16em; text-transform: uppercase; white-space: nowrap;
+  animation: la-label-reveal .7s cubic-bezier(.2,.8,.2,1) .3s both;
+  transition: letter-spacing .22s ease;
+}
+.la-launcher:hover .la-launcher-label { letter-spacing: .205em; }
+.la-badge {
+  display: none; position: absolute; top: -1px; right: -1px; width: 9px;
+  height: 9px; border-radius: 50%; background: #2f9e5f;
+  box-shadow: 0 0 0 2px var(--la-accent);
+}
+.la-launcher[data-ready="true"] .la-badge { display: block; }
+
+/* Panel: desktop dock above the launcher */
+.la-panel {
+  position: absolute; right: 0; bottom: calc(100% + 12px);
+  width: 380px; height: min(600px, calc(100dvh - 120px));
+  display: flex; flex-direction: column; background: var(--la-surface);
+  border: 1px solid var(--la-border); border-radius: 20px; overflow: hidden;
+  box-shadow: 0 24px 64px rgba(0,0,0,.24), 0 2px 6px rgba(0,0,0,.12);
+  animation: la-rise .18s ease-out;
+}
+.la-panel:focus { outline: none; }
+
+/* Header */
+.la-header {
+  display: flex; gap: 11px; align-items: center; padding: 12px 14px;
+  background: var(--la-accent); color: var(--la-on-accent);
+}
+.la-avatar {
+  width: 36px; height: 36px; border-radius: 50%; flex: none;
+  background: color-mix(in srgb, var(--la-on-accent) 55%, transparent);
+  color: var(--la-on-accent);
+  display: grid; place-items: center;
+}
+.la-avatar svg { width: 20px; height: 20px; }
+.la-titles { display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0; }
+.la-title { font-size: 15px; font-weight: 650; letter-spacing: -.01em;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.la-meta { display: flex; align-items: center; gap: 6px; font-size: 12px; }
+.la-dot { width: 7px; height: 7px; border-radius: 50%; flex: none;
+  background: color-mix(in srgb, var(--la-on-accent) 65%, transparent); }
+.la-dot-ready { background: #0f7a43; }
+.la-dot-loading { background: #8a5a00; animation: la-pulse 1.2s ease-in-out infinite; }
+.la-dot-error { background: #a1201b; }
+.la-close {
+  width: 32px; height: 32px; border: 0; border-radius: 50%; cursor: pointer;
+  background: transparent; color: var(--la-on-accent); display: grid; place-items: center;
+}
+.la-close:hover { background: color-mix(in srgb, var(--la-on-accent) 12%, transparent); }
+.la-close svg { width: 18px; height: 18px; }
+
+/* Transcript */
+.la-body {
+  flex: 1; overflow-y: auto; overscroll-behavior: contain;
+  padding: 14px; display: flex; flex-direction: column; gap: 12px;
+  background: var(--la-body);
+}
+.la-live {
+  position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
+  overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%);
+  white-space: nowrap; border: 0;
+}
+.la-msg { display: flex; gap: 8px; align-items: flex-end; }
+.la-user { justify-content: flex-end; }
+.la-col { display: flex; flex-direction: column; gap: 3px; max-width: 82%; min-width: 0; }
+.la-user .la-col { align-items: flex-end; }
+.la-msg-avatar {
+  width: 30px; height: 30px; border-radius: 50%; flex: none;
+  background: var(--la-bubble); color: var(--la-muted); display: grid; place-items: center;
+}
+.la-msg-avatar svg { width: 16px; height: 16px; }
+.la-bubble {
+  padding: 10px 13px; border-radius: 16px; border-top-left-radius: 5px;
+  font-size: 14.5px; line-height: 1.5; background: var(--la-bubble); color: var(--la-text);
+  white-space: pre-wrap; overflow-wrap: anywhere;
+}
+.la-user .la-bubble {
+  background: var(--la-accent); color: var(--la-on-accent); border-radius: 16px;
+  border-top-right-radius: 5px; border-top-left-radius: 16px;
+}
+.la-time { font-size: 11px; color: var(--la-muted); padding: 0 4px; }
+/* A caret while tokens stream in, so the answer never looks frozen. */
+.la-streaming::after {
+  content: ''; display: inline-block; width: 2px; height: 1em;
+  margin-left: 2px; vertical-align: -2px; background: currentColor;
+  animation: la-blink 1s steps(1) infinite;
+}
+
+/* A mode note is conversation, not chrome: italic, quiet, and it scrolls. */
+.la-note {
+  margin: 0 0 2px 38px; padding: 0;
+  font-size: 12px; font-style: italic; line-height: 1.45; color: var(--la-muted);
+}
+.la-mode-cap {
+  margin: -2px 0 0 38px; font-size: 12px; line-height: 1.45;
+  color: var(--la-muted);
+}
+
+/* Sources and quick replies */
+.la-sources { display: flex; flex-wrap: wrap; gap: 6px; padding-left: 38px; }
+.la-sources a, .la-sources span {
+  font-size: 12px; color: var(--la-text); text-decoration: none;
+  border: 1px solid var(--la-accent); border-radius: 999px; padding: 3px 9px;
+  background: var(--la-surface);
+  /* One citation, one line: a long page name ellipses instead of wrapping
+     into a four-line pill. The full title stays on the title attribute. */
+  max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.la-sources a:hover { background: color-mix(in srgb, var(--la-accent) 12%, var(--la-surface)); }
+.la-chips { display: flex; flex-wrap: wrap; gap: 8px; padding: 0 0 2px 38px; }
+.la-chip {
+  font: inherit; font-size: 13px; color: var(--la-text); cursor: pointer;
+  background: var(--la-surface); border: 1px solid var(--la-accent); border-radius: 999px;
+  padding: 7px 12px; max-width: 100%; text-align: left;
+}
+.la-chip:hover { background: color-mix(in srgb, var(--la-accent) 12%, var(--la-surface)); }
+.la-closest a { color: var(--la-text); text-decoration: underline;
+  text-decoration-color: var(--la-accent); }
+
+/* Typing indicator */
+.la-typing { display: inline-flex; gap: 5px; padding: 13px 14px; }
+.la-typing-dot {
+  width: 6px; height: 6px; border-radius: 50%; background: var(--la-muted);
+  animation: la-bounce 1.2s ease-in-out infinite;
+}
+.la-typing-dot:nth-child(2) { animation-delay: .15s; }
+.la-typing-dot:nth-child(3) { animation-delay: .3s; }
+
+/* Consent and progress cards */
+.la-consent { display: flex; flex-direction: column; gap: 8px; }
+.la-consent-title { font-size: 15px; }
+.la-consent p { margin: 0; font-size: 13.5px; color: var(--la-muted); }
+.la-consent-actions { display: flex; gap: 8px; align-items: center; margin-top: 2px; }
+/* WebGPU guidance: an ordered list because the fix is a short procedure. */
+.la-gpu-steps { margin: 0; padding-left: 18px; font-size: 13px; line-height: 1.45; color: var(--la-muted); }
+.la-gpu-steps li + li { margin-top: 4px; }
+.la-gpu-note { font-size: 12.5px !important; }
+.la-gpu-link { color: var(--la-accent); text-decoration: underline; text-underline-offset: 2px; }
+.la-consent-start, .la-consent-later, .la-retry {
+  font: inherit; font-size: 13.5px; cursor: pointer; border-radius: 999px;
+  padding: 8px 14px; border: 1px solid transparent;
+}
+.la-consent-start { background: var(--la-accent); color: var(--la-on-accent); border: 0; }
+.la-consent-later { background: transparent; color: var(--la-muted); border-color: var(--la-border); }
+.la-retry { background: var(--la-accent); color: var(--la-on-accent); border: 0;
+  margin-top: 8px; }
+.la-bar { height: 8px; border-radius: 999px; background: var(--la-border); overflow: hidden; }
+.la-bar span { display: block; height: 100%; width: 0; background: var(--la-accent);
+  transition: width .2s ease; }
+.la-progress { display: flex; flex-direction: column; gap: 8px; min-width: 240px; }
+.la-progress-text { font-size: 12.5px; color: var(--la-muted); }
+.la-progress-done { color: var(--la-muted); }
+
+/* Composer */
+.la-form {
+  display: flex; gap: 8px; align-items: flex-end; padding: 10px;
+  border-top: 1px solid var(--la-border); background: var(--la-surface);
+}
+.la-input {
+  flex: 1; box-sizing: border-box; min-height: 42px; max-height: 120px; resize: none;
+  border: 1px solid var(--la-border); border-radius: 18px; padding: 10px 14px;
+  font: inherit; font-size: 14.5px; line-height: 1.45; color: var(--la-text);
+  background: var(--la-surface); overflow-y: hidden;
+}
+.la-input:focus { outline: 2px solid var(--la-accent); outline-offset: 1px;
+  border-color: transparent; }
+.la-input::placeholder { color: var(--la-muted); opacity: 1; }
+.la-input:disabled { background: var(--la-body); }
+.la-send {
+  width: 42px; height: 42px; border-radius: 50%; border: 0; cursor: pointer;
+  background: var(--la-accent); color: var(--la-on-accent); display: grid; place-items: center;
+  flex: none; transition: opacity .15s ease, transform .15s ease;
+}
+.la-send svg { width: 18px; height: 18px; }
+.la-send:disabled { opacity: .45; cursor: default; }
+.la-send:not(:disabled):active { transform: scale(.94); }
+
+.la-launcher:focus-visible, .la-close:focus-visible, .la-send:focus-visible,
+.la-chip:focus-visible, .la-consent button:focus-visible {
+  outline: 2px solid var(--la-text); outline-offset: 2px;
+}
+
+/* Phones: a full-height sheet, safe-area aware, background locked */
+@media (max-width: 640px) {
+  /* The document element is the scroll container in Chrome and Safari, so
+     locking body alone still lets the page slide behind the sheet. */
+  html.la-open, body.la-open { overflow: hidden; }
+  .la-root { right: 16px; bottom: max(16px, env(safe-area-inset-bottom)); }
+  .la-panel {
+    position: fixed; inset: 0; width: 100%; height: 100dvh; max-height: none;
+    border: 0; border-radius: 0; animation: la-slide .24s cubic-bezier(.2,.8,.2,1);
+  }
+  .la-header { padding-top: calc(12px + env(safe-area-inset-top)); }
+  .la-form { padding-bottom: calc(10px + env(safe-area-inset-bottom)); }
+  /* 16px keeps iOS from zooming the page when the composer is focused. */
+  .la-input, .la-consent p, .la-bubble { font-size: 16px; }
+  .la-title { font-size: 16px; }
+  .la-col { max-width: 88%; }
+  /* Chips and citations keep the avatar's indent so they line up under the
+     bubble instead of hanging off the page edge. */
+  .la-chips, .la-sources { padding-left: 38px; }
+  /* On a phone the sheet covers the launcher anyway; keep the pill whole so
+     the words still explain what the button does on first visit. */
+  .la-launcher { height: 44px; box-shadow: 0 6px 20px rgba(0,0,0,.3); }
+}
+
+/* There is deliberately no prefers-color-scheme block: theme.js reads the
+   page's own palette, which is the scheme the visitor is actually looking at. */
+
+@keyframes la-label-reveal {
+  from { clip-path: inset(0 100% 0 0); letter-spacing: .3em; }
+  to { clip-path: inset(0); letter-spacing: .16em; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .la-launcher, .la-launcher-icon, .la-launcher-label { animation: none; transition: none; }
+  .la-launcher:hover { transform: none; }
+  .la-launcher:hover .la-launcher-icon { transform: none; }
+}
+
+@keyframes la-rise {
+  from { opacity: 0; transform: translateY(8px) scale(.985); }
+  to { opacity: 1; transform: none; }
+}
+/* Transform only: a fading full-screen sheet lets the page show through. */
+@keyframes la-slide {
+  from { transform: translateY(3%); }
+  to { transform: none; }
+}
+@keyframes la-bounce {
+  0%, 60%, 100% { transform: translateY(0); opacity: .6; }
+  30% { transform: translateY(-4px); opacity: 1; }
+}
+@keyframes la-blink { 50% { opacity: 0; } }
+@keyframes la-pulse { 50% { opacity: .35; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .la-panel, .la-launcher, .la-send, .la-bar span { animation: none; transition: none; }
+  .la-typing-dot, .la-dot-loading, .la-streaming::after { animation: none; }
+}
+
+/* An answer, its validation notice, and its links are independent elements:
+   a notice must never overwrite the answer text, and links stay below the
+   answer whether or not the answer passed validation. */
+.la-answer-text { min-width: 0; }
+.la-answer-notice {
+  font-size: 11.5px; color: color-mix(in srgb, var(--la-text) 62%, var(--la-surface));
+  margin-top: 4px;
+}
+.la-related { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding-left: 38px; margin-top: 6px; }
+.la-related-label { font-size: 11.5px; color: color-mix(in srgb, var(--la-text) 62%, var(--la-surface)); }
+.la-related a {
+  font-size: 12px; color: var(--la-text); text-decoration: none;
+  border: 1px solid var(--la-hairline, var(--la-accent)); border-radius: 999px; padding: 3px 9px;
+  background: var(--la-surface);
+  max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.la-related a:hover { background: color-mix(in srgb, var(--la-accent) 12%, var(--la-surface)); }
+.la-ver { font-size: 10.5px; opacity: 0.55; }
