@@ -1,0 +1,18 @@
+{
+  "siteName": "Example",
+  "assistantName": "AI Assistant",
+  "greeting": "Ask about the pages on this site",
+  "indexPath": "/local-assistant/assistant-index",
+  "model": "SmolLM2-360M-Instruct-q4f16_1-MLC",
+  "cpuModel": "HuggingFaceTB/SmolLM2-135M-Instruct",
+  "cpuDtype": "int8",
+  "embedder": "Xenova/all-MiniLM-L6-v2",
+  "relevanceThreshold": 0.35,
+  "topK": 6,
+  "maxAnswerWords": 120,
+  "accent": "#e8622c",
+  "maxPages": 500,
+  "modelBaseUrl": "",
+  "modelLibUrl": "",
+  "modelMirror": ""
+}

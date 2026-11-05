@@ -1,0 +1,220 @@
+/* The index builder is the one page a site owner sees. It is deliberately a
+   single self-contained stylesheet: no host theme, no framework, and it works
+   the same from a static folder or a plugin directory.
+
+   The charcoal palette matches the SiteGuard admin pages so both plugins read
+   as one family. No web font and no remote asset is loaded. */
+:root {
+  --la-bg: #14171b;
+  --la-surface: #1b1f24;
+  --la-surface-2: #20252b;
+  --la-text: #e8ebef;
+  --la-muted: #9aa4b0;
+  --la-border: #2b323a;
+  --la-accent: #e2a33f;
+  --la-accent-ink: #1a1205;
+  --la-code: #171b20;
+  --la-ok: #5cc98c;
+  --la-error: #f07a6e;
+  --la-shadow: 0 1px 2px rgba(0, 0, 0, .35), 0 16px 40px rgba(0, 0, 0, .22);
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  min-height: 100vh;
+  background:
+    radial-gradient(900px 340px at 88% -10%, rgba(226, 163, 63, .08), transparent 62%),
+    var(--la-bg);
+  color: var(--la-text);
+  font: 13.5px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+code, pre, .la-code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+
+.la-shell { max-width: 860px; margin: 0 auto; padding: 24px 18px 40px; }
+
+/* Header */
+.la-head {
+  display: flex; align-items: center; gap: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--la-border);
+}
+.la-brand { display: flex; align-items: center; gap: 11px; flex: 1 1 auto; min-width: 0; }
+.la-mark {
+  width: 34px; height: 34px; border-radius: 9px; flex: none;
+  display: grid; place-items: center;
+  color: var(--la-accent);
+  background: linear-gradient(180deg, #272d34, #1d2228);
+  border: 1px solid #3a434d;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.05);
+}
+.la-mark svg { width: 20px; height: 20px; fill: currentColor; }
+.la-head h1 { margin: 0; font-size: 19px; letter-spacing: -.01em; }
+.la-sub { margin: 2px 0 0; color: var(--la-muted); font-size: 12.5px; }
+.la-site {
+  flex: none; padding: 4px 10px;
+  border: 1px solid var(--la-border); border-radius: 999px;
+  background: var(--la-surface); color: var(--la-muted);
+  font-size: 12px; font-weight: 600; text-decoration: none; white-space: nowrap;
+}
+.la-site:hover, .la-site:focus { border-color: #3d4652; color: var(--la-text); }
+
+/* Tab strip. These are anchors first: without JavaScript every panel is
+   visible and each link jumps to its section. tabs.js then turns the strip
+   into tabs and keeps the hash in step. */
+.la-tabs {
+  display: flex; flex-wrap: wrap; gap: 2px;
+  width: fit-content; max-width: 100%;
+  margin: 12px 0 14px; padding: 3px;
+  background: var(--la-surface);
+  border: 1px solid var(--la-border); border-radius: 8px;
+}
+.la-tab {
+  padding: 5px 12px; border-radius: 6px;
+  color: var(--la-muted); font-size: 12.5px; font-weight: 600;
+  text-decoration: none;
+}
+.la-tab:hover, .la-tab:focus { background: var(--la-surface-2); color: var(--la-text); }
+.la-tab.is-on {
+  background: #262c33; color: var(--la-text);
+  box-shadow: inset 0 0 0 1px var(--la-border);
+}
+.is-tabbed .la-pane[hidden] { display: none !important; }
+.is-tabbed .la-pane + .la-pane { margin-top: 0; padding-top: 0; border-top: 0; }
+
+/* Panes: without the script they stack, separated by a rule. */
+.la-pane + .la-pane {
+  margin-top: 22px; padding-top: 20px; border-top: 1px solid var(--la-border);
+}
+.la-card button:focus-visible, .la-card input:focus-visible,
+.la-faq summary:focus-visible {
+  outline: 2px solid var(--la-accent); outline-offset: 2px;
+}
+
+/* Cards */
+.la-card {
+  background: var(--la-surface); border: 1px solid var(--la-border);
+  border-radius: 10px; padding: 14px 16px; box-shadow: var(--la-shadow);
+  margin-bottom: 12px;
+}
+.la-card-quiet { background: var(--la-surface-2); box-shadow: none; }
+.la-card h2 { margin: 0 0 8px; font-size: 14px; letter-spacing: -.005em; }
+.la-lead { margin: 0 0 12px; color: var(--la-muted); max-width: 70ch; }
+.la-note { color: var(--la-muted); font-size: 12.5px; margin: 10px 0 0; }
+.la-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 720px) { .la-cols { grid-template-columns: 1fr; } }
+
+/* Forms */
+.la-form label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 5px; }
+.la-row { display: flex; gap: 8px; }
+.la-row input { flex: 1 1 auto; min-width: 0; }
+input[type="url"], input[type="text"], input[type="number"] {
+  font: inherit; color: var(--la-text); background: var(--la-code);
+  border: 1px solid var(--la-border); border-radius: 7px; padding: 8px 10px;
+}
+input[type="url"]:focus, input[type="text"]:focus, input[type="number"]:focus {
+  border-color: var(--la-accent); outline: none;
+}
+button, .la-button-quiet {
+  font: inherit; font-size: 13px; font-weight: 600;
+  background: var(--la-accent); color: var(--la-accent-ink);
+  border: 1px solid transparent; border-radius: 7px;
+  padding: 8px 14px; cursor: pointer; white-space: nowrap;
+}
+button:hover { filter: brightness(1.05); }
+button:disabled { opacity: .55; cursor: default; filter: none; }
+.la-button-quiet {
+  background: var(--la-surface); color: var(--la-text); border-color: var(--la-border);
+}
+.la-button-quiet[hidden] { display: none; }
+#la-wp-save[hidden] { display: none; }
+
+/* Settings tab */
+#la-settings { display: grid; gap: 12px; }
+.la-field { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.la-field label { margin: 0; }
+.la-field input { width: 100%; }
+.la-hint { margin: 0; color: var(--la-muted); font-size: 11.5px; }
+.la-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.la-actions { margin: 0; }
+@media (max-width: 560px) { .la-pair { grid-template-columns: 1fr; } }
+
+/* Progress and report */
+.la-bar {
+  height: 6px; margin: 14px 0 0; border-radius: 999px; overflow: hidden;
+  background: var(--la-code);
+}
+.la-bar span {
+  display: block; height: 100%; width: 0; background: var(--la-accent);
+  transition: width .2s ease;
+}
+.la-report {
+  margin: 12px 0 0; padding: 10px 12px; min-height: 54px;
+  white-space: pre-wrap; font-size: 12.5px; line-height: 1.5;
+  background: var(--la-code); border: 1px solid var(--la-border);
+  border-radius: 8px; color: var(--la-text); overflow-wrap: anywhere;
+}
+.la-download { margin-top: 4px; }
+.la-file {
+  display: inline-block; margin: 8px 10px 0 0;
+  color: var(--la-accent); font-weight: 600; font-size: 13px;
+  text-decoration: none; border-bottom: 1px solid currentColor;
+}
+.la-file:hover { filter: brightness(1.1); }
+
+/* Facts, steps, code */
+.la-facts { margin: 0; display: grid; gap: 8px; }
+.la-facts div { display: grid; grid-template-columns: 170px 1fr; gap: 10px; }
+.la-facts dt { font-weight: 600; font-size: 12.5px; }
+.la-facts dd { margin: 0; color: var(--la-muted); font-size: 12.5px; }
+@media (max-width: 620px) { .la-facts div { grid-template-columns: 1fr; gap: 2px; } }
+.la-steps { margin: 0; padding-left: 18px; display: grid; gap: 8px; font-size: 13px; min-width: 0; }
+.la-steps li { padding-left: 2px; min-width: 0; }
+/* Keep the snippet on its own lines: a phone scrolls the block rather than
+   breaking an attribute in half. */
+.la-code {
+  margin: 8px 0 0; padding: 10px 12px; max-width: 100%; white-space: pre; overflow-x: auto;
+  background: var(--la-code); border: 1px solid var(--la-border);
+  border-radius: 7px; font-size: 12px; line-height: 1.5;
+}
+
+/* FAQ */
+.la-faq { display: grid; gap: 6px; }
+.la-faq details {
+  border: 1px solid var(--la-border); border-radius: 8px;
+  background: var(--la-surface-2); padding: 0 13px;
+}
+.la-faq details[open] { background: var(--la-surface); }
+.la-faq summary {
+  cursor: pointer; list-style: none; padding: 10px 0;
+  font-weight: 600; font-size: 12.5px;
+}
+.la-faq summary::-webkit-details-marker { display: none; }
+.la-faq summary::after {
+  content: "+"; float: right; color: var(--la-muted); font-weight: 400; font-size: 15px;
+}
+.la-faq details[open] summary::after { content: "–"; }
+.la-faq p { margin: 0 0 10px; color: var(--la-muted); font-size: 12.5px; max-width: 70ch; }
+
+/* Footer */
+.la-foot {
+  display: flex; justify-content: space-between; gap: 12px;
+  margin-top: 20px; padding-top: 12px; border-top: 1px solid var(--la-border);
+  color: var(--la-muted); font-size: 12px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .la-bar span { transition: none; }
+}
+
+/* The WordPress admin does not load this file; these keep the standalone page
+   readable on very small screens. */
+@media (max-width: 520px) {
+  .la-shell { padding: 16px 12px 32px; }
+  .la-head { flex-wrap: wrap; }
+  .la-site { margin-left: 45px; }
+  .la-row { flex-direction: column; }
+  .la-card { padding: 12px 12px; }
+}

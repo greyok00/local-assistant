@@ -1,0 +1,79 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>harness</title>
+<link rel="stylesheet" href="../../src/widget.css"></head>
+<body><p>Page content</p>
+<!-- local-assistant/loader.js: stands in for the embed marker a real page carries -->
+
+<script>
+  // Opt-in for the offline spec: register the same worker URL the loader uses
+  // (?index= is encodeURIComponent'd in both places) so there is one cache.
+  if (new URLSearchParams(location.search).has('sw') && 'serviceWorker' in navigator) {
+    navigator.serviceWorker.register(
+      '../../src/service-worker.js?index=' + encodeURIComponent('/test-index'),
+      { scope: '../../' }
+    ).catch(() => { /* the offline layer is optional */ });
+  }
+</script>
+<script type="module">
+  import { mountWidget } from '../../src/widget.js';
+  import { createRetriever } from '../../src/retriever.js';
+  import { DEFAULT_CONFIG } from '../../src/config.js';
+
+  const vec = (i) => { const v = new Float32Array(384); v[i] = 1; return v; };
+  const meta = { chunks: [
+    { url: '/a', title: 'Bonds', heading: 'Appeal bond', text: 'An appeal bond stays enforcement.' },
+    { url: '/b', title: 'Evidence', heading: 'Chain', text: 'Chain of custody begins at seizure.' },
+    { url: '/c', title: 'Witnesses', heading: 'Testimony', text: 'A witness testifies under oath.' },
+    { url: '/d', title: 'Deadlines', heading: 'Filing', text: 'A filing must meet the deadline.' }
+  ]};
+  const vectors = [vec(0), vec(1), vec(2), vec(3)];
+
+  const services = {
+    // window.__nextVector lets a test force a refusal (zero vector, no terms).
+    embedder: { embed: async () => [window.__nextVector || vec(0)] },
+    retriever: createRetriever({ meta, vectors, threshold: 0.1, topK: 3 }),
+    // window.__loadDelay holds the download open so a test can see the card;
+    // window.__loadError simulates the WebGPU preflight refusing to start.
+    loadChat: async ({ onProgress }) => {
+      // window.__loadFail simulates a broken download (blocked CDN, offline).
+      if (window.__loadFail) throw new Error('Failed to fetch');
+      if (window.__loadError) {
+        throw Object.assign(new Error(`WebGPU unavailable (${window.__loadError})`), {
+          code: 'webgpu-unavailable', reason: window.__loadError
+        });
+      }
+      onProgress({ progress: 0.5, text: 'half' });
+      onProgress({ progress: 1, text: 'done' });
+      if (window.__loadDelay) await new Promise(r => setTimeout(r, window.__loadDelay));
+      return {
+        // window.__loadMode simulates the compatibility engine (no WebGPU).
+        mode: window.__loadMode || 'gpu',
+        ask: async (messages, { onToken }) => {
+          if (window.__askDelay) await new Promise(r => setTimeout(r, window.__askDelay));
+          window.__askCount = (window.__askCount || 0) + 1;
+          onToken(window.__answerText || 'An appeal bond stays enforcement. [1]');
+          return 'ok';
+        }
+      };
+    },
+    cacheState: {
+      // Mirrors loader.js: the last mode is remembered so a return visit
+      // loads quietly instead of showing a download card again.
+      get readyMode() {
+        try { return localStorage.getItem('local-assistant.mode') || ''; } catch { return ''; }
+      },
+      markReady(mode) {
+        try { localStorage.setItem('local-assistant.mode', mode === 'cpu' ? 'cpu' : 'gpu'); } catch { }
+      }
+    },
+    // window.__webgpuStatus is still exposed for specs that describe the
+    // fallback chain; the widget itself no longer asks before installing.
+  };
+
+  window.__services = services;
+  window.__mountWidget = mountWidget;
+  window.__widget = mountWidget({
+    config: { ...DEFAULT_CONFIG, siteName: 'Test Site', indexPath: '/test-index' },
+    services
+  });
+</script></body></html>

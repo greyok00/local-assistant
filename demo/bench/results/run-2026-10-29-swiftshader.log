@@ -1,0 +1,11 @@
+flags: ["--enable-unsafe-webgpu","--use-webgpu-adapter=swiftshader"] software: true
+WebGPU adapter: {"available":true,"attempts":1,"vendor":"google","architecture":"swiftshader","device":"","description":"","shaderF16":false}
+CONSOLE ERROR: Failed to load resource: the server responded with a status of 404 (Not found)
+CONSOLE ERROR: Failed to load resource: the server responded with a status of 404 (Not found)
+[10s] Loading artifact and models…
+[403s] Running 20 questions…
+STOPPED: no question completed in 10 minutes (0/20 done) rows 0
+RUN FAILED: Error: no question completed in 10 minutes (0/20 done)
+    at repo://demo/scripts/run-real.mjs:248:13
+[failure] Running 20 questions… 
+EXIT 1

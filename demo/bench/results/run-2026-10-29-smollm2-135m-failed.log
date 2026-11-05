@@ -1,0 +1,14 @@
+WebGPU adapter: {"available":true,"vendor":"nvidia","architecture":"ampere","device":"","description":""}
+CONSOLE ERROR: Failed to load resource: the server responded with a status of 404 (Not found)
+CONSOLE ERROR: Failed to load resource: the server responded with a status of 404 (Not found)
+[10s] Loading artifact and models…
+CONSOLE ERROR: GPUOutOfMemoryError
+CONSOLE ERROR: GPUOutOfMemoryError
+CONSOLE ERROR: Device was lost. This can happen due to insufficient memory or other GPU constraints. Detailed error: [object GPUDeviceLostInfo]. Please try to reload WebLLM with a less resource-intensive model.
+CONSOLE ERROR: Device was lost. This can happen due to insufficient memory or other GPU constraints. Detailed error: [object GPUDeviceLostInfo]. Please try to reload WebLLM with a less resource-intensive model.
+CONSOLE ERROR: Device lost, calling Instance.dispose(). Please initialize again.  GPUDeviceLostInfo
+CONSOLE ERROR: Device lost, calling Instance.dispose(). Please initialize again.  GPUDeviceLostInfo
+[591s] Bench failed: Object has already been disposed
+RUN FAILED: Error: Bench failed: Object has already been disposed
+    at repo://demo/scripts/run-real.mjs:172:44
+[failure] Bench failed: Object has already been disposed 

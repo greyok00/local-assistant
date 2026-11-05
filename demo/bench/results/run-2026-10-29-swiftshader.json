@@ -1,0 +1,21 @@
+{
+  "status": "stopped",
+  "reason": "no question completed in 10 minutes (0/20 done)",
+  "elapsedMs": 604157,
+  "model": "SmolLM2-360M-Instruct-q4f32_1-MLC",
+  "software": true,
+  "adapter": {
+    "available": true,
+    "attempts": 1,
+    "vendor": "google",
+    "architecture": "swiftshader",
+    "device": "",
+    "description": "",
+    "shaderF16": false
+  },
+  "flags": [
+    "--enable-unsafe-webgpu",
+    "--use-webgpu-adapter=swiftshader"
+  ],
+  "rows": []
+}

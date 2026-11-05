@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Assistant bench</title>
+<style>
+body{font:14px/1.5 system-ui,sans-serif;margin:24px;}
+table{border-collapse:collapse;width:100%;margin-top:16px;}
+th,td{border:1px solid #ddd;padding:6px 8px;text-align:left;vertical-align:top;}
+#la-summary{background:#f6f7f9;padding:12px;border-radius:8px;white-space:pre-wrap;}
+#la-status{color:#444;margin-top:12px;min-height:1.5em;}
+</style></head>
+<body>
+<h1>Assistant bench</h1>
+<p><button id="la-run" type="button">Run 20 questions</button>
+   <button id="la-save" type="button" disabled>Download results</button></p>
+<pre id="la-summary">Not run.</pre>
+<p id="la-status"></p>
+<table id="la-results"><thead><tr>
+<th>ID</th><th>Question</th><th>TTFT ms</th><th>Total ms</th><th>Refused</th><th>Sources</th><th>Answer</th>
+</tr></thead><tbody></tbody></table>
+<script type="module" src="./bench.js"></script>
+</body></html>
