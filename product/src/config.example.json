@@ -4,6 +4,7 @@
   "greeting": "Ask about the pages on this site",
   "indexPath": "/local-assistant/assistant-index",
   "model": "SmolLM2-360M-Instruct-q4f16_1-MLC",
+  "modelMobile": "SmolLM2-135M-Instruct-q0f16-MLC",
   "cpuModel": "HuggingFaceTB/SmolLM2-135M-Instruct",
   "cpuDtype": "int8",
   "embedder": "Xenova/all-MiniLM-L6-v2",

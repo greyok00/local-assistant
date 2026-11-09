@@ -26,12 +26,41 @@ export function buildAppConfig(prebuiltList, model, modelBaseUrl, modelLibUrl = 
 // model" with nothing happening. Give the GPU this long to produce an engine,
 // then treat it like any other GPU failure and let the CPU path take over.
 export const GPU_INIT_TIMEOUT_MS = 45000;
+// 2026-11-09 (owner: switch to webllm so mobile support works — mobile GPU):
+// phones get their own profile. Mobile WebGPU exists (Android Chrome) but the
+// WGSL compile is slower and the 360M weights are a big download on mobile
+// data, so a phone drops to the 135M MLC build (still WebGPU, still cited)
+// and gets a longer compile watchdog. Desktops keep the 360M default.
+export const MOBILE_INIT_TIMEOUT_MS = 90000;
+
+export function isMobileDevice(ua = (typeof navigator !== 'undefined'
+  ? navigator.userAgent : '')) {
+  // Android + iPhone/iPad-as-mobile; iPad desktop-mode UA (Macintosh + touch)
+  // and any Firefox-on-Android match too
+  if (/Android|iPhone|Mobile/i.test(ua)) return true;
+  if (/iPad/.test(ua)) return true;
+  if (/Macintosh/.test(ua) && typeof window !== 'undefined'
+      && 'ontouchstart' in window) return true;
+  return false;
+}
+
+export function mobileProfile(model, { modelMobile, ua } = {}) {
+  if (!isMobileDevice(ua)) return { model, gpuInitTimeoutMs: GPU_INIT_TIMEOUT_MS };
+  return {
+    model: modelMobile || model,
+    gpuInitTimeoutMs: MOBILE_INIT_TIMEOUT_MS,
+  };
+}
 
 export async function defaultEngineFactory(model, {
   appConfig, modelBaseUrl = '', modelLibUrl = '', initProgressCallback,
-  cpuModel = '', cpuDtype = 'int8', cpuModelMirror = '', gpuInitTimeoutMs = GPU_INIT_TIMEOUT_MS
+  cpuModel = '', cpuDtype = 'int8', cpuModelMirror = '',
+  modelMobile = '', gpuInitTimeoutMs
 } = {}) {
   // Fail before the weights download, not inside the WGSL compiler.
+  const profile = mobileProfile(model, { modelMobile });
+  model = profile.model;                       // phones drop to the 135M MLC build
+  gpuInitTimeoutMs = gpuInitTimeoutMs ?? profile.gpuInitTimeoutMs;
   const status = await webgpuStatus();
   const cpuEngine = async (reason) => {
     initProgressCallback?.({ progress: 0, text: 'Starting compatibility model' });

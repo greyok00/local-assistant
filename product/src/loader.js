@@ -193,6 +193,7 @@ if (!script?.hasAttribute('data-assistant')) {
       emit(0.2, 'Downloading language model');
       const chat = createChat({
         model: config.model,
+        modelMobile: config.modelMobile,
         cpuModel: config.cpuModel,
         cpuDtype: config.cpuDtype,
         cpuModelMirror: fromConfig(config.cpuModelMirror),

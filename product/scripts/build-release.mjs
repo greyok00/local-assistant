@@ -35,7 +35,7 @@ await rm(releaseDir, { recursive: true, force: true });
 await mkdir(stage, { recursive: true });
 await cp(abs('dist'), stage, { recursive: true });
 await rm(join(stage, 'wordpress'), { recursive: true, force: true });
-await cp(abs('README.md'), join(stage, 'README.md'));
+await cp(abs('../README.md'), join(stage, 'README.md'));
 // The product license is the repository's GPL-2.0-or-later file at the root.
 await cp(join(root, '..', 'LICENSE'), join(stage, 'LICENSE'));
 

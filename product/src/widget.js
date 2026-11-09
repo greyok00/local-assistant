@@ -17,7 +17,7 @@ const COMPOSER_MAX_PX = 120;
 
 // Visible build identifier: rendered in the panel header so a visitor or owner
 // can always tell which runtime is answering. Bump on every behavioural change.
-export const LA_VERSION = '0.3.14';
+export const LA_VERSION = '0.3.15';
 
 // The engine reports its mode as a string on some paths and a mode() accessor on
 // the real WebGPU/CPU wrapper; normalise so both are readable.

@@ -10,6 +10,10 @@ const DEFAULTS = {
   // q4f16_1 is the only quantisation WebLLM 0.2.86 publishes for SmolLM2; the
   // 135M model ships only q0f16/q0f32 there, so 360M-q4f16_1 is the default.
   model: 'SmolLM2-360M-Instruct-q4f16_1-MLC',
+  // Mobile GPU profile (2026-11-09): phones run the same web-llm path on the
+  // smaller MLC build — lighter download + faster compile on mobile GPUs.
+  // Empty string = keep the desktop model on phones too.
+  modelMobile: 'SmolLM2-135M-Instruct-q0f16-MLC',
   // The compatibility engine: a smaller model from the same family, run by
   // transformers.js on the CPU for browsers without WebGPU. Empty disables it
   // and leaves the search-only fallback in its place.
@@ -111,6 +115,13 @@ export function validateConfig(raw = {}) {
   };
   if (typeof config.cpuModel !== 'string' || !(config.cpuModel === '' || isHubId(config.cpuModel))) {
     errors.push('cpuModel must be empty or "owner/model"');
+  }
+
+  // 2026-11-09 mobile GPU profile: modelMobile is a WebLLM model id the same
+  // way model is — empty (keep the desktop model) or one WebLLM id.
+  if (typeof config.modelMobile === 'string' && config.modelMobile.trim()
+      && !/^[A-Za-z0-9._-]+$/.test(config.modelMobile)) {
+    errors.push('modelMobile must be a single WebLLM model id (letters, digits, dot, dash, underscore)');
   }
 
   const DTYPES = new Set(['int8', 'q8', 'uint8', 'q4', 'fp32', 'fp16']);
