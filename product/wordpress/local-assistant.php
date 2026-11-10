@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Grey Local Site AI Assistant
  * Description: A browser-only assistant that answers from this site's own pages.
- * Version: 0.3.14
+ * Version: 0.3.15
  * Requires at least: 6.4
  * Requires PHP: 8.1
  * License: GPL-2.0-or-later
@@ -18,31 +18,31 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('LOCAL_ASSISTANT_VERSION', '0.3.14');
+define('LOCAL_ASSISTANT_VERSION', '0.3.15');
 define('LOCAL_ASSISTANT_DIR', plugin_dir_path(__FILE__));
 define('LOCAL_ASSISTANT_URL', plugin_dir_url(__FILE__));
 define('LOCAL_ASSISTANT_UPLOADS', 'local-assistant');
 
-/** Upload caps for the two artifact parts (bytes). */
+
 define('LOCAL_ASSISTANT_MAX_META_BYTES', 16 * 1024 * 1024);
 define('LOCAL_ASSISTANT_MAX_BIN_BYTES', 64 * 1024 * 1024);
 
-/**
- * The wolf mark, drawn inline so no image request is needed and the same
- * silhouette as the widget's launcher. The grey tile matches SiteGuard's
- * shield so both plugins read as one family.
- */
-/**
- * Prints the wolf mark. The markup is a fixed literal: passing it through
- * wp_kses would lowercase `viewBox` and break the drawing.
- */
+
+
+
+
+
+
+
+
+
 function local_assistant_mark(): void {
     $path = 'M22.00 10.25L20.33 9.28L19.37 8.32L19.37 7.18L18.67 7.70L18.40 6.82L17.61 7.53L17.00 8.58L15.95 9.02L15.25 9.02L15.33 9.37L14.19 9.37L14.28 9.63L12.96 9.54L13.14 9.89L9.98 9.81L6.04 10.60L4.37 10.60L3.05 10.16L2.00 9.19L2.09 9.98L2.53 10.95L3.32 11.65L3.05 11.82L4.02 12.09L3.93 12.35L5.42 12.35L7.09 11.74L6.65 12.70L5.68 13.75L7.53 13.14L6.47 14.11L4.28 14.02L3.93 14.19L2.96 15.51L2.09 15.86L2.00 16.21L3.14 16.30L4.54 14.98L4.81 15.25L4.19 16.12L3.32 16.65L3.32 17.00L4.54 17.00L5.68 15.60L7.00 15.60L8.40 14.89L9.89 13.23L9.54 12.88L9.81 12.79L12.00 13.23L12.18 13.40L11.91 13.58L12.96 13.58L12.79 13.84L14.81 13.84L15.68 13.40L16.91 14.98L17.96 15.51L20.33 17.18L21.56 17.18L21.30 16.65L20.33 16.39L18.14 14.19L16.82 13.67L17.00 13.49L18.93 13.32L19.46 13.75L19.46 14.37L19.72 14.81L19.89 14.54L20.16 14.98L20.33 14.89L20.42 14.02L19.63 12.53L19.37 12.35L17.96 12.53L17.88 12.35L19.54 10.68L20.16 10.60L20.86 11.04L21.56 11.04L21.74 10.77L21.21 10.60L21.12 10.33L21.82 10.51ZM20.60 10.86L20.86 10.77L20.42 10.51L20.16 10.60ZM17.79 9.28L17.88 9.46L18.32 9.19L18.23 9.02Z';
     echo '<span class="la-admin-logo" aria-hidden="true"><svg viewBox="0 0 24 24">'
         . '<path d="' . esc_attr($path) . '"/></svg></span>';
 }
 
-/** Moves a file through WP_Filesystem, the core-sanctioned path. */
+
 function local_assistant_move(string $from, string $to): bool {
     require_once ABSPATH . 'wp-admin/includes/file.php';
     global $wp_filesystem;
@@ -52,7 +52,7 @@ function local_assistant_move(string $from, string $to): bool {
     return (bool) $wp_filesystem->move($from, $to, true);
 }
 
-/** Config keys that are safe to publish to every visitor. */
+
 function local_assistant_public_keys(): array {
     return [
         'siteName',
@@ -84,7 +84,7 @@ add_action('admin_menu', function () {
     );
 });
 
-// One click from the Plugins screen instead of hunting through Settings.
+
 add_filter('plugin_action_links_' . plugin_basename(__FILE__), function ($links) {
     $links['local-assistant-settings'] = '<a href="'
         . esc_url(admin_url('options-general.php?page=local-assistant')) . '">Settings &amp; builder</a>';
@@ -114,11 +114,11 @@ function local_assistant_config(): array {
         'accent' => '#e8622c',
         'maxPages' => 500,
         'modelBaseUrl' => '',
-        // The model-specific WebGPU library ships inside the plugin, so the
-        // GPU engine never pulls executable code from a third party.
+        
+        
         'modelLibUrl' => local_assistant_model_lib_default(),
-        // Same-origin weights when the site hosts them: Hugging Face is slow
-        // from shared hosting and a stalled CDN is what parks a load at 95%.
+        
+        
         'modelMirror' => local_assistant_model_mirror_default(),
         'cpuModel' => 'HuggingFaceTB/SmolLM2-135M-Instruct',
         'cpuDtype' => 'int8',
@@ -126,7 +126,7 @@ function local_assistant_config(): array {
     return array_merge($defaults, (array) get_option('local_assistant_config', []));
 }
 
-/** The bundled WebLLM model library, served from this plugin's own folder. */
+
 function local_assistant_model_lib_default(): string {
     $file = 'dist/vendor/web-llm/SmolLM2-360M-Instruct-q4f16_1_cs1k-webgpu.wasm';
     if (!is_file(LOCAL_ASSISTANT_DIR . $file)) {
@@ -135,7 +135,7 @@ function local_assistant_model_lib_default(): string {
     return LOCAL_ASSISTANT_URL . $file;
 }
 
-/** The uploads folder holding the weights, when the host has one. */
+
 function local_assistant_model_mirror_default(): string {
     $uploads = wp_upload_dir();
     $dir = trailingslashit($uploads['basedir']) . LOCAL_ASSISTANT_UPLOADS . '/models/hf';
@@ -145,12 +145,12 @@ function local_assistant_model_mirror_default(): string {
     return trailingslashit($uploads['baseurl']) . LOCAL_ASSISTANT_UPLOADS . '/models/hf/';
 }
 
-/**
- * The public config is also written as a static file. A site that blocks
- * anonymous REST traffic (a security mu-plugin, a hardening plugin) answers
- * 403 to /wp-json/…/config, and the widget then refuses to start for every
- * logged-out visitor. A file in uploads has no such gate.
- */
+
+
+
+
+
+
 function local_assistant_public_config_file(): string {
     return local_assistant_artifact_dir() . '/assistant-config.json';
 }
@@ -181,13 +181,13 @@ function local_assistant_write_public_config(): void {
 add_action('update_option_local_assistant_config', 'local_assistant_write_public_config');
 register_activation_hook(__FILE__, 'local_assistant_write_public_config');
 
-/** Only the public subset, in a fixed shape the loader's validateConfig accepts. */
+
 function local_assistant_public_config(): array {
     $config = local_assistant_config();
     return array_intersect_key($config, array_flip(local_assistant_public_keys()));
 }
 
-/** The browser assets only load when the whole dist bundle has been copied. */
+
 function local_assistant_dist_ready(): bool {
     foreach (['loader.js', 'dashboard.js', 'widget.css'] as $file) {
         if (!file_exists(LOCAL_ASSISTANT_DIR . 'dist/' . $file)) {
@@ -202,9 +202,9 @@ function local_assistant_render_admin(): void {
         return;
     }
     $config = local_assistant_config();
-    // options.php redirects back here after a save without a fragment, so the
-    // page names the tab to open instead of relying on the URL. The flag is
-    // read through filter_input, which returns null when it is absent.
+    
+    
+    
     $start = null !== filter_input(INPUT_GET, 'settings-updated') ? 'settings' : 'build';
     ?>
     <div class="wrap" id="local-assistant-admin" data-tabs data-tab-start="<?php echo esc_attr($start); ?>">
@@ -384,8 +384,8 @@ function local_assistant_render_admin(): void {
 add_action('admin_init', function () {
     register_setting('local_assistant', 'local_assistant_config', [
         'type' => 'array',
-        // Each field is kept only when it passes the same rule the browser-side
-        // validateConfig() applies; anything else falls back to the default.
+        
+        
         'sanitize_callback' => function ($input) {
             $clean = [];
             if (!is_array($input)) {
@@ -423,8 +423,8 @@ add_action('admin_init', function () {
     ]);
 });
 
-// Public, read-only config route. The widget loader fetches this as data-config
-// and only ever sees the keys in local_assistant_public_keys().
+
+
 add_action('rest_api_init', function () {
     register_rest_route('local-assistant/v1', '/config', [
         'methods' => 'GET',
@@ -437,12 +437,12 @@ add_action('rest_api_init', function () {
     ]);
 });
 
-/**
- * Reads one uploaded file part after strict checks.
- *
- * Returns the bytes or null. The client's content-type is never consulted: the
- * caller validates the payload itself (JSON shape and the LAI1 magic).
- */
+
+
+
+
+
+
 function local_assistant_read_upload(string $key, int $max_bytes): ?string {
     // phpcs:ignore WordPress.Security.NonceVerification.Missing -- the AJAX handler verifies its nonce with check_ajax_referer() before calling this helper.
     if (!isset($_FILES[$key]) || !is_array($_FILES[$key])) {
@@ -471,13 +471,13 @@ function local_assistant_read_upload(string $key, int $max_bytes): ?string {
     return $bytes;
 }
 
-/**
- * Validates the binary vector header against the metadata.
- *
- * Layout (product/src/indexcodec.js): 4-byte magic "LAI1", uint16 LE version,
- * uint16 LE dims, uint32 LE count, then count * dims * 4 bytes of float32.
- * Returns a specific error message, or null when the artifact is well-formed.
- */
+
+
+
+
+
+
+
 function local_assistant_validate_bin(string $bin, int $chunk_count): ?string {
     if (strlen($bin) < 12 || 0 !== strncmp($bin, 'LAI1', 4)) {
         return 'invalid artifact header';
@@ -501,7 +501,7 @@ function local_assistant_validate_bin(string $bin, int $chunk_count): ?string {
     return null;
 }
 
-/** Writes both artifact parts, replacing the previous pair only on success. */
+
 function local_assistant_write_artifact(string $meta, string $bin): bool {
     $dir = local_assistant_artifact_dir();
     if (!is_dir($dir) || !wp_is_writable($dir)) {
@@ -516,8 +516,8 @@ function local_assistant_write_artifact(string $meta, string $bin): bool {
         wp_delete_file($meta_tmp);
         return false;
     }
-    // .bin first, then .json: a failure at the second move can never leave a
-    // new .json paired with an old .bin.
+    
+    
     if (!local_assistant_move($bin_tmp, $dir . '/assistant-index.bin')) {
         wp_delete_file($meta_tmp);
         wp_delete_file($bin_tmp);
@@ -561,8 +561,8 @@ add_action('wp_ajax_local_assistant_save', function () {
     ]);
 });
 
-// Public pages: enqueue only the loader module. It reads data-config, fetches
-// the REST config, and derives every other URL from its own src.
+
+
 add_action('wp_enqueue_scripts', function () {
     if (is_admin() || is_feed()) {
         return;
@@ -570,8 +570,8 @@ add_action('wp_enqueue_scripts', function () {
     if (!local_assistant_dist_ready()) {
         return;
     }
-    // Refresh the static config when it is missing or the options changed:
-    // the visitor-facing URL must never be the reason the widget stays dark.
+    
+    
     if (!is_file(local_assistant_public_config_file())) {
         local_assistant_write_public_config();
     }
@@ -590,11 +590,11 @@ add_action('wp_enqueue_scripts', function () {
     );
 });
 
-// A plain enqueue cannot emit type="module" plus data attributes, so the tag
-// that wp_enqueue_script() produced is enhanced in place (never duplicated).
+
+
 add_filter('script_loader_tag', function ($tag, $handle, $src) {
     if ('local-assistant-loader' === $handle) {
-        // Static file first: it survives hosts that 403 anonymous REST.
+        
         $config_url = is_file(local_assistant_public_config_file())
             ? local_assistant_public_config_url()
             : rest_url('local-assistant/v1/config');
@@ -617,12 +617,12 @@ add_action('admin_enqueue_scripts', function ($hook) {
     if ('settings_page_local-assistant' !== $hook) {
         return;
     }
-    // Scoped bar styling; dashboard.css is not loaded here because it styles
-    // body/input/button globally and would break the admin chrome.
+    
+    
     wp_register_style('local-assistant-admin', false, [], LOCAL_ASSISTANT_VERSION);
     wp_enqueue_style('local-assistant-admin');
-    // Dark charcoal canvas, matching the SiteGuard pages. Scoped to this
-    // screen so the rest of wp-admin is untouched; no remote font or image.
+    
+    
     wp_add_inline_style(
         'local-assistant-admin',
         '#local-assistant-admin{'
@@ -634,8 +634,8 @@ add_action('admin_enqueue_scripts', function ($hook) {
         . 'border:1px solid var(--la-line);border-radius:12px;'
         . 'box-shadow:0 22px 60px rgba(0,0,0,.18);}'
         . '#local-assistant-admin *{box-sizing:border-box;}'
-        // WordPress styles .button with display:inline-block, which outranks the
-        // UA rule for [hidden]; without this the save button shows before a build.
+        
+        
         . '#local-assistant-admin [hidden]{display:none !important;}'
         . '#local-assistant-admin a{color:var(--la-accent);}'
         . '#local-assistant-admin h1{margin:0;padding:0;color:var(--la-ink);font-size:19px;line-height:1.25;}'
@@ -655,7 +655,7 @@ add_action('admin_enqueue_scripts', function ($hook) {
         . 'color:var(--la-muted);font-size:12px;font-weight:600;text-decoration:none;white-space:nowrap;}'
         . '#local-assistant-admin .la-admin-site:hover,'
         . '#local-assistant-admin .la-admin-site:focus{border-color:#3d4652;color:var(--la-ink);}'
-        // Tab strip: anchors first, tabs once tabs.js runs.
+        
         . '#local-assistant-admin .la-tabs-nav{display:flex;flex-wrap:wrap;gap:2px;'
         . 'width:fit-content;max-width:100%;margin:12px 0 14px;padding:3px;'
         . 'background:var(--la-panel);border:1px solid var(--la-line);border-radius:8px;}'
@@ -690,13 +690,13 @@ add_action('admin_enqueue_scripts', function ($hook) {
         . '#local-assistant-admin .la-facts dt{font-weight:600;font-size:12.5px;color:var(--la-ink);}'
         . '#local-assistant-admin .la-facts dd{margin:0;color:var(--la-muted);font-size:12.5px;}'
         . '#local-assistant-admin .la-steps{margin:0;padding-left:18px;display:grid;gap:8px;font-size:13px;min-width:0;color:var(--la-muted);}'
-        // A grid item defaults to min-width:auto, so the wide snippet below would
-        // stretch the step, the panel, and the whole admin page on a phone.
+        
+        
         . '#local-assistant-admin .la-steps li{min-width:0;}'
         . '#local-assistant-admin .la-code{margin:8px 0 0;padding:10px 12px;max-width:100%;white-space:pre;'
         . 'overflow-x:auto;background:#171b20;border:1px solid var(--la-line);border-radius:7px;'
         . 'font-size:12px;line-height:1.5;color:var(--la-ink);}'
-        // Settings tab: the same field grid as the static page.
+        
         . '#local-assistant-admin .la-settings{display:grid;gap:12px;}'
         . '#local-assistant-admin .la-field{display:flex;flex-direction:column;gap:4px;min-width:0;}'
         . '#local-assistant-admin .la-field label{font-size:12px;font-weight:600;color:var(--la-ink);}'
@@ -741,8 +741,8 @@ add_action('admin_enqueue_scripts', function ($hook) {
         . '#local-assistant-admin .la-row{flex-wrap:wrap;}}'
     );
 
-    // Plain script, not a module: it must run even when the builder bundle
-    // cannot (a missing dist is reported above). Same file the static page uses.
+    
+    
     if (file_exists(LOCAL_ASSISTANT_DIR . 'dist/tabs.js')) {
         wp_enqueue_script(
             'local-assistant-tabs',
