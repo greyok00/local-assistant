@@ -5,20 +5,21 @@
 **A browser-local assistant that answers questions from your own pages. No
 server, no API key, and nothing ever leaves the device.**
 
+<a href="https://wordpress.org/plugins/grey-local-site-ai-assistant">
+<img alt="In the WordPress Plugin Directory" src="https://s.w.org/style/images/about/WordPress-logotype-wmark.png" width="88" align="center">
+</a>
+
+### Now in the WordPress Plugin Directory
+
+**Approved by the Plugins Team** — [grey-local-site-ai-assistant](https://wordpress.org/plugins/grey-local-site-ai-assistant).
+Install it from your WordPress dashboard (Plugins → Add New → search
+"Grey Local Site AI Assistant"); this repo is its full readable source.
+
 [![License](https://img.shields.io/badge/license-GPL--2.0--or--later-22C55E)](LICENSE)
 [![JavaScript](https://img.shields.io/badge/JavaScript-ES2022-yellow)](product/src)
 [![CI](https://github.com/greyok00/local-assistant/actions/workflows/ci.yml/badge.svg)](.github/workflows/ci.yml)
-[![As featured on WordPress.org — install from the Plugin Directory](https://img.shields.io/badge/featured%20on-WordPress.org-21759B)](https://wordpress.org/plugins/grey-local-site-ai-assistant)
 
 </div>
-
-> **As featured on WordPress.org** — approved by the Plugins Team and listed in
-> the official Plugin Directory:
-> **[grey-local-site-ai-assistant](https://wordpress.org/plugins/grey-local-site-ai-assistant)**.
-> The same browser-local assistant, installable from your WordPress dashboard
-> with one click; this repo is its full readable source (see the
-> plugin readme's Source Code section on its WordPress.org page for the
-> build mapping and the third-party library sources).
 
 ## What is it?
 
