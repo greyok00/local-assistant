@@ -1,0 +1,24 @@
+Local Assistant bundles the following third-party components. Each remains
+under its own licence; the plugin's own code is GPL-2.0-or-later.
+
+Transformers.js
+  Licence: Apache-2.0
+  Source:  https://github.com/huggingface/transformers.js
+
+ONNX Runtime Web (ort-wasm-simd-threaded.jsep)
+  Licence: MIT
+  Source:  https://github.com/microsoft/onnxruntime
+
+WebLLM
+  Licence: Apache-2.0
+  Source:  https://github.com/mlc-ai/web-llm
+
+MLC model library, bundled as
+dist/vendor/web-llm/SmolLM2-360M-Instruct-q4f16_1_cs1k-webgpu.wasm
+  Licence: Apache-2.0
+  Source:  https://github.com/mlc-ai/binary-mlc-llm-libs
+
+Models downloaded by the visitor's browser at run time (not bundled):
+  SmolLM2-360M-Instruct-q4f16_1-MLC  Apache-2.0  https://huggingface.co/HuggingFaceTB
+  SmolLM2-135M-Instruct              Apache-2.0  https://huggingface.co/HuggingFaceTB
+  all-MiniLM-L6-v2 (Xenova)          Apache-2.0  https://huggingface.co/Xenova
