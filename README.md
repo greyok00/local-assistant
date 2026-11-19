@@ -8,6 +8,20 @@ There is no server, no API key, and no question ever leaves the device. Every
 answer names the page it came from, and when the pages do not contain the
 answer it says so instead of inventing one.
 
+<div align="center">
+
+<a href="https://wordpress.org/plugins/grey-local-site-ai-assistant">
+<img alt="In the WordPress Plugin Directory" src="https://s.w.org/style/images/about/WordPress-logotype-wmark.png" width="88" align="center">
+</a>
+
+### Now in the WordPress Plugin Directory
+
+**Approved by the Plugins Team** — [grey-local-site-ai-assistant](https://wordpress.org/plugins/grey-local-site-ai-assistant).
+Install it from your WordPress dashboard (Plugins → Add New → search
+"Grey Local Site AI Assistant"); this repo is its full readable source.
+
+</div>
+
 **Version 0.3.14** · Static sites and WordPress · GPL-2.0-or-later
 
 ## What the visitor gets
