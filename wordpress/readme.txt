@@ -76,7 +76,7 @@ cite the page it read:
    Plugins > Add New > Upload Plugin. The zip already contains the built
    `dist/` assets; no build step is needed.
 2. Activate the plugin through the Plugins screen.
-3. Open Settings > Local Assistant and press "Ingest site". The index is built
+3. Open Settings > Local Assistant and press "Build index". The index is built
    in your browser and saved under `wp-content/uploads/local-assistant/`.
 4. The assistant appears in the bottom-right corner of every public page.
 
@@ -100,7 +100,7 @@ page instead.
 
 = What happens if a page changes? =
 
-Press "Ingest site" again. The index is rebuilt from the sitemap; there is no
+Press "Build index" again. The index is rebuilt from the sitemap; there is no
 schedule and no background job.
 
 = Is the index public? =
@@ -136,7 +136,7 @@ code from a third-party host:
 * `dist/vendor/web-llm/SmolLM2-360M-Instruct-q4f16_1_cs1k-webgpu.wasm` is
   WebLLM's compiled GPU program for the `SmolLM2-360M-Instruct-q4f16_1`
   chat model; it is the WebGPU conversation engine itself. The fetched copy
-  is tracked in the repository under `scripts/vendor-extra/`.
+  is tracked in the repository at `static/vendor/web-llm/`.
 
 == Changelog ==
 

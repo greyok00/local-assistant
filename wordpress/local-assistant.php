@@ -514,16 +514,38 @@ function local_assistant_write_artifact(string $meta, string $bin): bool {
         wp_delete_file($meta_tmp);
         return false;
     }
-    
-    
-    if (!local_assistant_move($bin_tmp, $dir . '/assistant-index.bin')) {
+    // The .json and the .bin are one artifact: the widget fetches both and
+    // rejects any count mismatch, so a rename that lands only one of them
+    // would leave a new .bin live under an old .json (or the reverse) and the
+    // assistant would report itself unavailable until the next rebuild. The
+    // current .bin is moved aside first, and any later failure puts it back
+    // so the previous consistent pair stays on disk.
+    $bin_backup = $dir . '/assistant-index.bin.' . wp_generate_password(8, false, false) . '.bak';
+    $had_bin = file_exists($dir . '/assistant-index.bin');
+    if ($had_bin && !local_assistant_move($dir . '/assistant-index.bin', $bin_backup)) {
         wp_delete_file($meta_tmp);
         wp_delete_file($bin_tmp);
         return false;
     }
+    if (!local_assistant_move($bin_tmp, $dir . '/assistant-index.bin')) {
+        wp_delete_file($meta_tmp);
+        wp_delete_file($bin_tmp);
+        if ($had_bin) {
+            local_assistant_move($bin_backup, $dir . '/assistant-index.bin');
+        }
+        return false;
+    }
     if (!local_assistant_move($meta_tmp, $dir . '/assistant-index.json')) {
         wp_delete_file($meta_tmp);
+        if ($had_bin) {
+            local_assistant_move($bin_backup, $dir . '/assistant-index.bin');
+        } else {
+            wp_delete_file($dir . '/assistant-index.bin');
+        }
         return false;
+    }
+    if ($had_bin) {
+        wp_delete_file($bin_backup);
     }
     return true;
 }
