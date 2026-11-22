@@ -8,22 +8,23 @@
 
 No server, no API key, and no question leaves the device. Every answer names the page it came from, and when the pages do not contain the answer it says so instead of inventing one.
 
+<a href="https://wordpress.org/plugins/grey-local-site-ai-assistant">
+<img alt="In the WordPress Plugin Directory" src="https://s.w.org/style/images/about/WordPress-logotype-wmark.png" width="88" align="center">
+</a>
+
+### Now in the WordPress Plugin Directory
+
+**Approved by the Plugins Team** — [grey-local-site-ai-assistant](https://wordpress.org/plugins/grey-local-site-ai-assistant).
+Install it from your WordPress dashboard (Plugins → Add New → search
+"Grey Local Site AI Assistant"); this repo is its full readable source.
+
 [![Version](https://img.shields.io/badge/version-0.3.14-2f6f5e)](https://github.com/greyok00/local-assistant/releases)
 [![WordPress](https://img.shields.io/badge/WordPress-plugin-21759b)](https://wordpress.org/plugins/grey-local-site-ai-assistant)
 [![License](https://img.shields.io/badge/license-GPL--2.0--or--later-blue)](LICENSE)
-[![As featured on WordPress.org — install from the Plugin Directory](https://img.shields.io/badge/featured%20on-WordPress.org-21759B)](https://wordpress.org/plugins/grey-local-site-ai-assistant)
 
 [Overview](#overview) · [Screenshots](#screenshots) · [How it works](#how-it-works) · [Install](#quick-start) · [Settings](#settings) · [Privacy](#privacy)
 
 </div>
-
-> **As featured on WordPress.org** — approved by the Plugins Team and listed in
-> the official Plugin Directory:
-> **[grey-local-site-ai-assistant](https://wordpress.org/plugins/grey-local-site-ai-assistant)**.
-> The same browser-local assistant, installable from your WordPress dashboard
-> with one click; this repo is its full readable source (see the
-> plugin readme's Source Code section on its WordPress.org page for the
-> build mapping and the third-party library sources).
 
 ---
 
