@@ -18,7 +18,7 @@ No server, no API key, and no question leaves the device. Every answer names the
 Install it from your WordPress dashboard (Plugins → Add New → search
 "Grey Local Site AI Assistant"); this repo is its full readable source.
 
-[![Version](https://img.shields.io/badge/version-0.3.14-2f6f5e)](https://github.com/greyok00/local-assistant/releases)
+[![Version](https://img.shields.io/badge/version-0.3.16-2f6f5e)](https://github.com/greyok00/local-assistant/releases)
 [![WordPress](https://img.shields.io/badge/WordPress-plugin-21759b)](https://wordpress.org/plugins/grey-local-site-ai-assistant)
 [![License](https://img.shields.io/badge/license-GPL--2.0--or--later-blue)](LICENSE)
 
@@ -39,7 +39,7 @@ The assistant is available as a WordPress plugin in the
 [WordPress Plugin Directory](https://wordpress.org/plugins/grey-local-site-ai-assistant)
 and as a static-site build. This repository is the full readable source.
 
-**Version 0.3.14 · Static sites and WordPress · GPL-2.0-or-later**
+**Version 0.3.16 · Static sites and WordPress · GPL-2.0-or-later**
 
 ## Screenshots
 

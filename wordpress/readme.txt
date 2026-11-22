@@ -4,7 +4,7 @@ Tags: assistant, chatbot, search, offline, privacy
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.1
-Stable tag: 0.3.14
+Stable tag: 0.3.16
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -140,6 +140,13 @@ code from a third-party host:
 
 == Changelog ==
 
+= 0.3.16 =
+* Maintenance release. A failed metadata save during a rebuild can no longer
+  leave the new vectors under the old index description: the artifact pair is
+  now published together, so a partial rebuild cannot take the assistant
+  offline for visitors. The readme wording was aligned with the interface it
+  documents, and the plugin checks were updated to match. No new features.
+
 = 0.3.15 =
 * WordPress.org review compliance release. The readable source of every
   minified script now ships inside the archive in the `source/` folder, and
@@ -173,6 +180,9 @@ code from a third-party host:
 * Label-only passages are refused instead of quoted.
 
 == Upgrade Notice ==
+
+= 0.3.16 =
+No new features. A partial rebuild can no longer leave the widget offline.
 
 = 0.3.15 =
 Review-compliance release: readable sources now ship inside the archive.
