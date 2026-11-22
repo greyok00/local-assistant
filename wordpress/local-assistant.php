@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Grey Local Site AI Assistant
  * Description: A browser-only assistant that answers from this site's own pages.
- * Version: 0.3.14
+ * Version: 0.3.15
  * Requires at least: 6.4
  * Requires PHP: 8.1
  * License: GPL-2.0-or-later
@@ -18,7 +18,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('LOCAL_ASSISTANT_VERSION', '0.3.12');
+define('LOCAL_ASSISTANT_VERSION', '0.3.15');
 define('LOCAL_ASSISTANT_DIR', plugin_dir_path(__FILE__));
 define('LOCAL_ASSISTANT_URL', plugin_dir_url(__FILE__));
 define('LOCAL_ASSISTANT_UPLOADS', 'local-assistant');

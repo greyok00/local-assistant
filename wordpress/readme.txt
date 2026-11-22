@@ -60,6 +60,16 @@ Hugging Face under Hugging Face's own terms. The site owner can point the
 downloads at another host with the `modelBaseUrl`, `modelLibUrl`, and
 `modelMirror` settings.
 
+= See it live =
+
+The assistant runs on the author's own site — ask it something and watch it
+cite the page it read:
+
+* Live demo: [randybarham.com](https://randybarham.com) (the chat panel opens
+  on every public page).
+* Full readable source, build scripts, and tests:
+  [github.com/greyok00/local-assistant](https://github.com/greyok00/local-assistant).
+
 == Installation ==
 
 1. Upload the plugin folder to `/wp-content/plugins/`, or install the zip from
@@ -99,7 +109,44 @@ It is written to `wp-content/uploads/local-assistant/`, which is normally
 readable by visitors — that is what makes offline answers possible. It contains
 text already published on the site, not private content.
 
+== Source Code ==
+
+The WordPress package is generated from readable sources, and the full
+build is public:
+
+* The readable sources and build scripts live at
+  [github.com/greyok00/local-assistant](https://github.com/greyok00/local-assistant)
+  — `src/` holds the plugin's JavaScript modules, `scripts/` the build tools.
+* This zip also carries a readable copy of every script it was built from
+  in its `source/` folder.
+* To build the package from source: `npm ci && npm run vendor && npm run
+  build` (Node.js 20+), then `npm run release` for versioned zips.
+* The third-party libraries in `dist/vendor/` are Transformers.js
+  (Apache-2.0, [sources](https://github.com/huggingface/transformers.js)) and
+  WebLLM (Apache-2.0, [sources](https://github.com/mlc-ai/web-llm)); exact
+  versions are listed in the included `THIRD-PARTY-NOTICES.txt`.
+
+The two `.wasm` files flagged in review are required, and both are loaded
+only from the plugin's own folder — the plugin never fetches executable
+code from a third-party host:
+
+* `dist/vendor/transformers/ort-wasm-simd-threaded.jsep.wasm` is the ONNX
+  Runtime Web engine that runs the embedding model and the CPU fallback
+  model inside Transformers.js; the plugin cannot function without it.
+* `dist/vendor/web-llm/SmolLM2-360M-Instruct-q4f16_1_cs1k-webgpu.wasm` is
+  WebLLM's compiled GPU program for the `SmolLM2-360M-Instruct-q4f16_1`
+  chat model; it is the WebGPU conversation engine itself. The fetched copy
+  is tracked in the repository under `scripts/vendor-extra/`.
+
 == Changelog ==
+
+= 0.3.15 =
+* WordPress.org review compliance release. The readable source of every
+  minified script now ships inside the archive in the `source/` folder, and
+  the repository now carries the sources and
+  build scripts (`src/`, `scripts/`, package files) so the package can be
+  rebuilt from source. The readme documents the source location and the
+  third-party library origins. No runtime behaviour changed.
 
 = 0.3.12 =
 * Renamed Grey Local Site AI Assistant, so the directory slug names this plugin.
@@ -126,6 +173,10 @@ text already published on the site, not private content.
 * Label-only passages are refused instead of quoted.
 
 == Upgrade Notice ==
+
+= 0.3.15 =
+Review-compliance release: readable sources now ship inside the archive.
+No behaviour change.
 
 = 0.3.12 =
 Plugin Check clean: no warnings. No behaviour change.
