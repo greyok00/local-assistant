@@ -214,7 +214,7 @@ maps, absolute home paths, email addresses or token-shaped strings.
 
 ## Documentation
 
-- [`product/docs/ASSISTANT-WORKFLOW.md`](docs/ASSISTANT-WORKFLOW.md) — how an index is built and used
+- [`docs/ASSISTANT-WORKFLOW.md`](docs/ASSISTANT-WORKFLOW.md) — how an index is built and used
 
 ## License
 
